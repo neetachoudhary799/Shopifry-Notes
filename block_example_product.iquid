@@ -1,0 +1,128 @@
+<!--------------addproduct-------------->
+{% if section.blocks.size > 0 %}
+<div id="custom_section-blog_product">
+  {% for block in section.blocks %}  
+
+{% assign product = all_products[block.settings.add_product] %}
+{%if block.settings.product_sidebar_title != blank %}
+<div class="sidebar_main_title blog-title-wrapper">
+<div class="title-bar">
+  <h1>{{block.settings.product_sidebar_title}}</h1>
+  </div>
+  </div>
+{%endif%}
+
+<div class="col-md-12 col-sm-12 col-12 custom_featured_image">
+<img src="{{product.featured_image | img_url:''}}">
+  </div>
+    
+<section class="product-description-main-wrapper wow fadeInUp" style="visibility: visible; animation-name: fadeInUp;">
+ <a class="homepage-headline-text__link" href="{{ product.url }}">
+            <h2 class="reviews-enabled">{{ product.title }}</h2>
+          </a>
+  
+{% form 'product', product, id: "add-to-cart-form" %}
+  <input type="hidden" name="form_type" value="product">
+              <input type="hidden" name="utf8" value="✓">
+              <input type="hidden" id="cart-link" value="/cart">
+
+              <ul class="product-page--pricing discount-badge">
+
+                <!-- Variant price -->
+                <li class="product-page--pricing--variant-price">
+                  <span class="js" id="price-field"><span class="money">{{ product.price | money }}</span></span>
+                </li>
+              </ul>
+{% if block.settings.Add_to_cart %}
+              <div class="row homepage-sections--indiv-product-slider-variants">
+ 				 <input name="id" value="{{ product.variants.first.id }}" type="hidden" />
+                  <div class="col-md-12 col-sm-12 col-12 featured-product--submit-action">
+                    <button type="submit" name="add" id="purchase" class="btn " data-cart-action="">
+                        {{ 'products.product.add_to_cart' | t }}
+                    </button>
+                      {{ form | payment_button }}
+                  </div>
+                  </div>
+{%endif%}
+           {% endform %}
+
+          <div class="col-sm-12">
+        {% render 'social-sharing' %}
+          </div>
+
+
+
+{% if product.description %}
+          <p>  {{ product.description  | truncatewords: 140 }}</p>
+        {% endif %}
+      </section>
+  {% endfor %}
+
+</div>  
+{%endif%}
+<!------------end addproduct--------------->
+{% schema %}
+{
+    "name": {
+        "en": "Article pages",
+        "de": "Artikelseiten",
+        "es": "Páginas de artículos",
+        "fr": "Pages d'articles",
+        "pt-PT": "Páginas de artigos"
+    },
+    "settings": [
+				{
+						"type": "checkbox",
+						"id": "show_author_name",
+						"label": {
+								"en": "Show author name",
+								"de": "Autorennamen anzeigen",
+								"es": "Mostrar el nombre de autor",
+								"fr": "Afficher le nom de l'auteur",
+								"pt-PT": "Mostrar nome do autor"
+						},
+						"default": false
+				},
+        {
+            "type": "header",
+            "content": {
+                "en": "Sidebar",
+                "de": "Seitenleiste",
+                "es": "Barra lateral",
+                "fr": "Barre latérale",
+                "pt-PT": "Barra lateral"
+            }
+        }
+       
+    ],
+  "blocks": [
+    {
+      "type": "select",
+      "name": "Product",
+      "settings": [
+		 {
+            "type": "text",
+            "id": "product_sidebar_title",
+            "label": {
+                "en": "Heading",
+                "de": "Seitenleisten-Überschrift",
+                "es": "Encabezado de la barra lateral",
+                "fr": "Titre de la barre latérale",
+                "pt-PT": "Título da barra lateral"
+            }
+        },
+        {
+          "id": "add_product",
+          "type": "product",
+       		"label": "Add Product"
+        },
+        {
+          "id": "Add_to_cart",
+          "type": "checkbox",
+          "label": "Enable Addtocart"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
