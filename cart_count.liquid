@@ -1,0 +1,7 @@
+ 
+function cart_count(){
+var cart_count = cart.item_count;
+  var cart_amount = Shopify.formatMoney(cart.total_price);
+  $('.item_count').html('(' + cart_count + ')');
+  $('.cart_amount').html(cart_amount);
+}
