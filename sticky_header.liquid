@@ -1,0 +1,21 @@
+<style>
+nav.nav-bar.custom_header_sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99;
+    background: #FFF;
+}
+</style>
+<script>
+$(window).scroll(function() {    
+        var scroll = $(window).scrollTop();    
+        if(scroll > 10){
+          $('.header-sticky-wrapper').addClass('custom_header_sticky');
+        }
+        else if(scroll< 10){
+          $('.header-sticky-wrapper').removeClass('custom_header_sticky');
+        }
+      });
+</script>
