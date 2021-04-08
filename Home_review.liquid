@@ -1,0 +1,136 @@
+<div class="page-width">
+  <div id="section-cta" class="custom_slider">
+    <div class="section-header text-center">
+      <h3> {{ section.settings.text-box }} </h3>
+    </div>
+    <div class="grid grid--uniform grid--view-items">
+      <div class="custom_review_section" id="new-review"> 
+        {% assign size = section.blocks.size %}
+        {% case size %}
+        {% when 1 %}    
+        {%- assign grid_item_width = 'medium-up--one-full medium-up--one-full' -%}
+        {% when 2 %}     
+        {%- assign grid_item_width = 'small--one-half medium-up--one-half' -%}
+        {% when 3 %}     
+        {%- assign grid_item_width = 'small--one-half medium-up--one-quarter' -%}
+        {% when 4 %}
+        {%- assign grid_item_width = 'small--one-half medium-up--one-quarter' -%}
+        {% endcase %}
+        {% for block in section.blocks %}
+        <div class="grid__item {{grid_item_width}}"> 
+          {% if block.settings.review_text != blank %} 
+          <div class="custom_review_title"><h4>{{block.settings.review_text }}</h4></div>  
+          {% endif %}
+          {% if block.settings.number_of_slides != blank %} 
+          <div class="custom_review_title">{% assign num=block.settings.number_of_slides %}
+            <i class="fa fa-star {%if num >= 1%}custom-fill-color{%endif%}" aria-hidden="true"></i>
+            <i class="fa fa-star {%if num >= 2%}custom-fill-color{%endif%}" aria-hidden="true"></i>
+            <i class="fa fa-star {%if num >= 3%}custom-fill-color{%endif%}" aria-hidden="true"></i>
+            <i class="fa fa-star {%if num >= 4%}custom-fill-color{%endif%}" aria-hidden="true"></i>
+            <i class="fa fa-star {%if num >= 5%}custom-fill-color{%endif%}" aria-hidden="true"></i>
+          </div>  
+          {% endif %}
+          {% if block.settings.review_date != blank %} 
+          <div class="custom_review_date">{{block.settings.review_date }}</div>  
+          {% endif %}
+          {% if block.settings.review_des != blank %} 
+          <div class="custom_review_description">{{block.settings.review_des }}</div>  
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% if section.settings.quickview != blank and section.settings.text-button != blank and section.settings.text-button-url != blank %}  
+      <div class="Review_view_button">
+        <a class="button" href="{{section.settings.text-button-url}}">{{section.settings.text-button}}</a>
+      </div>
+      {%endif%}
+    </div> 
+  </div> 
+</div>
+{% schema %}
+{
+  "name": "Product Review",
+"class":"index-section custom-review-section",
+	"max_blocks": 4,
+  "settings": [
+    {
+      "id": "text-box",
+      "type": "text",
+      "label": "Heading",
+      "default": "Product Review"
+    },
+{
+  "id": "text-button",
+  "type": "text",
+  "label": "Review Button Text"
+  },
+{
+  "id": "text-button-url",
+  "type": "url",
+  "label": "Review Button url"
+  },
+  {
+  "type": "checkbox",
+  "id": "quickview",
+  "label": "Review Button"
+  }
+  ],
+  "blocks": [
+    {
+      "type": "select",
+      "name": "Add Reviews",
+      "settings": [
+        {
+          "id": "review_text",
+          "type": "text",
+       		"label": "Review Title",
+      		"default": "Product Review"
+        },
+	{
+        "type": "range",
+        "id": "number_of_slides",
+        "label": "Rating",
+        "max": 5,
+        "min": 1,
+        "step": 1,
+        "default": 3
+      },
+		{
+          "id": "review_date",
+          "type": "text",
+       		"label": "Review date",
+      		"default": "14 feb"
+        },
+		{
+          "id": "review_des",
+          "type": "textarea",
+       		"label": "Review Description",
+      		"default": "Add customer reviews and testimonials to showcase your store’s happy customers."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Review",
+      "category": "Product Review",
+      "blocks": [
+        { 
+          "type": "select"
+        },
+		{ 
+          "type": "select"
+        },
+		{ 
+          "type": "select"
+        },
+		{ 
+          "type": "select"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+
