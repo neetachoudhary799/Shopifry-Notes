@@ -1,0 +1,8 @@
+{% assign my_description = collection.description | split: '<!-- split -->'  %}
+{%if collection.description contains '<!-- split -->' %}
+                        <div class="top_desc">{{ my_description[0] }}</div>
+                        <div class="append-content-custom">{{ my_description[1] }}</div>
+                        <span class="moreless-button-one">Read More</span>
+{%else%}
+{{collection.description}}
+{%endif%}
