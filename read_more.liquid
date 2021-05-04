@@ -1,13 +1,66 @@
-<div class="main_description">
-{% assign my_description = collection.description | split: '<!-- split -->'  %}
-{%if collection.description contains '<!-- split -->' %}
-                        <div class="top_desc">{{ my_description[0] }}</div>
-                        <div class="append-content-custom">{{ my_description[1] }}</div>
-                        <span class="moreless-button-one">Read More</span>
-{%else%}
-{{collection.description}}
-{%endif%}
-                      </div>
+
+<div
+  data-section-id="{{ section.id }}"
+  data-section-type="featured-content-section"
+  class="text-center">
+
+  <div class="page-width">
+    <div class="grid">
+      <div class="grid__item{% if section.settings.narrow_column %} medium-up--three-quarters medium-up--push-one-eighth{% endif %}">
+        {%- if section.settings.title != blank -%}
+          <h2>{{ section.settings.title }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.text != blank -%}
+        <div class="rte">
+          {{ section.settings.text }}
+        </div>
+        {%- endif -%}
+
+        {%- if section.settings.text_id != blank -%}
+        <div class="rte advance_info append-content-custom" style="display:none;">
+          {{ section.settings.text_id }}
+        </div>
+		<span class="moreless-button-one">Read More</span>
+        {%- endif -%}
+
+       
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Text with Read More",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "text",
+        "label": "Text",
+        "default": "<p>A sentence or two introducing your brand, what you sell, and what makes your brand compelling to customers.</p>"
+      },
+		 {
+        "type": "richtext",
+        "id": "text_id",
+        "label": "Advance Information",
+        "default": "<p>A sentence or two introducing your brand, what you sell, and what makes your brand compelling to customers.</p>"
+      } 
+    ],
+    "presets": [{
+      "name": "Text With Read More",
+      "category": "Text"
+    }]
+  }
+{% endschema %}
+
 <script>
   $(document).ready(function(){
  $('.moreless-button-one').click(function() {
@@ -15,7 +68,6 @@
   if ($('.moreless-button-one').text() == "Read More") {
     $(this).text("Read less");
 $('.append-content-custom').show();
-
   } else {
     $(this).text("Read More");
 $('.append-content-custom').hide();
