@@ -1,0 +1,46 @@
+<div id="shopify-section-swatch-color-options" class="shopify-section">
+ {% for block in section.blocks %}  
+{%assign color_data_class = block.settings.text-box | handleize %}
+{%assign color_data = block.settings.background_color  %}
+{%assign img_picker = block.settings.swatch_image | img_url:''  %}
+<style>
+ #addToCartForm-product-template .swatch .swatch-element.color.{{color_data_class}} label{
+    background-color: {{color_data}};
+   {%if block.settings.swatch_image != blank %}
+   background-image: url('{{img_picker}}') !important;
+     {%endif%}
+}
+</style>
+{% endfor %}
+</div>
+{% schema %}
+{
+"name": "Swatch Colors",
+"max_blocks": 30,
+
+"blocks": [
+{
+"type": "select",
+"name": "Swatch Colors",
+"settings": [
+{
+"id": "text-box",
+"type": "text",
+"label": "Color Name"
+},
+{
+"id": "swatch_image",
+"type": "image_picker",
+"label": "Swatch Image"
+},
+{
+"type": "color",
+"id": "background_color",
+"label": "Background color",
+"default": "#ffffff"
+}
+]
+}
+]
+}
+{% endschema %}
