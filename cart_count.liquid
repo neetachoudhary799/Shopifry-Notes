@@ -1,7 +1,27 @@
  
-function cart_count(){
-var cart_count = cart.item_count;
-  var cart_amount = Shopify.formatMoney(cart.total_price);
-  $('.item_count').html('(' + cart_count + ')');
-  $('.cart_amount').html(cart_amount);
-}
+setTimeout(function(){
+
+var $addToCartForm = $('form[action="/cart/add"]');
+        $.ajax({
+          type: "get",
+          url: "/cart.js",
+          dataType: 'json',
+         data: $addToCartForm.serialize(),
+          success: function(line_item) {
+              if ((typeof callback) === 'function') {
+                  callback(line_item);
+              }
+              else {
+                  Shopify.onItemAdded(line_item);
+              }
+          },
+         error: function(xhr, text) {
+         $("#error-modal").css('display','block');
+         }
+      });
+jQuery.getJSON('/cart.js', function(cart) {
+        $('.item_count').html(cart.item_count);
+      });
+ 
+//document.location.href = '/cart'
+},2000);
