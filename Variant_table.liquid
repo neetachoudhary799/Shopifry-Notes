@@ -1,0 +1,193 @@
+{% capture size %}
+  {%- for option in product.options_with_values -%}
+  {%- assign option_index = forloop.index0 -%}
+  {%- assign downcased_option = option.name | downcase -%}
+  {%- assign downcased_option_check = option.name | downcase | prepend: '"' | append: '"' | strip -%} 
+    {%- if downcased_option == 'size' or downcased_option == 'Size' -%}
+        {%- for value in option.values -%}
+		{{ value }}{%- if forloop.last == true -%}{%- else -%},{%- endif -%} 
+        {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
+{% endcapture %}
+
+{% assign option_index = 0 %}
+{% assign option_size = 0 %}
+{% assign option_colour = 0 %}
+{%- for option in product.options_with_values -%}
+{%- assign option_index = forloop.index0 -%}
+{%- assign downcased_option = option.name | downcase -%}
+{%- assign downcased_option_check = option.name | downcase | prepend: '"' | append: '"' | strip -%} 
+{%- if downcased_option == 'size' or downcased_option == 'Size' -%}
+{% assign option_size = option_index %}
+{%- endif -%}
+{%- if downcased_option == 'color' or downcased_option == 'colour' or gl_color_name contains downcased_option_check -%}     
+{% assign option_colour = option_index %}
+{%- endif -%}
+{%- endfor -%}
+
+
+<div class="cust_table-outer-varit">
+  <div class="container">
+    <div class="cust_table-varit-inner">
+      <table id="cust_variations_table" cellspacing="0">
+        <thead>
+          <tr>
+			<th>Color</th>
+            <th>Size</th>
+            <th>QTY</th>
+            <th>Price</th>  
+            <th>DISCOUNT</th>      
+            <th>SKU</th>   
+            <th >Add To Cart</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- assign size = size | split: ","  -%}
+			{% assign variable_ch = 0 %}
+          {% for neww in size %}
+          <tr class="variants" data-variant-title="" data-variant-id=""> 
+            <td>
+              <select class="Variant_select" onchange="onchange_variant(this);">
+                {%- for variant in product.variants -%}
+                {% assign value_first = variant.options[option_colour] %}
+                {% assign value = variant.options[option_size] %}
+                {% assign match = variant.title %}
+                {%comment%}{{neww}} == {{match}}=={{value}}<br>{%endcomment%}
+                {%if neww contains value %}
+                <option {%comment%} style="background:{{value_first}};"{%endcomment%}
+                        data-id="{{variant.id}}" 
+                        data-price="{{variant.price | money}}"
+                        id="{{variant.id}}" 
+                        data-sku ="{{variant.sku}}"
+	                    data-checkqty="{{variant.inventory_quantity}}"
+                        data-qty=" {% if variant.available %}{{variant.inventory_quantity}}pcs{%else%}0pcs{%endif%}"
+                        data-image="{{ variant.image.src }}"
+						data-imageid="{{ variant.image.id }}"
+                        value="{{variant.id}}">
+                  {{value_first}}
+                </option>
+                {%endif%}
+                {%- endfor -%}
+              </select>
+            </td>
+			<td> {{neww}}</td>
+            {% assign variable = 0 %}
+            {%- for variant in product.variants -%}
+            {% assign value_first = variant.options[option_colour] %}
+            {% assign value = variant.options[option_size] %}
+            {% assign match = variant.title %}   
+            {%if neww contains value  %}{%if variable == 0  %}
+            <td><span id="varaint_qty">{{variant.inventory_quantity}}pcs</span></td>
+            <td class="price">
+				<table class="price_table"> 
+				{%if variable_ch == 0  %}
+              <thead> <tr><td class="range">1</td></tr> </thead>
+				{%endif%}
+              <tbody> <tr><td><span id="varaint_price">{{variant.price | money}}</span></td></tr></tbody>
+          		</table>
+            </td>
+            <td class=" Discount vari-tb-ct varient_table">
+              <table class="discount_tables">
+				{%if variable_ch == 0  %}
+                <thead><tr><th>5-9</th><th>10-24</th><th>25-54</th><th>55+</th></tr></thead>
+				{%endif%}
+                <tbody> <tr><td>2% off</td><td>4% off</td><td>6% off</td><td>10% off</td></tr></tbody>
+              </table>
+            </td>
+            <td><span id="varaint_sku">{{variant.sku}}</span></td>
+            <td>
+              <div class="addtocart_cus">
+                <form id="custommyform" method="POST" >
+                  <input id="varaint_id" type="hidden" name="id" value="{{ variant.id }}" />
+                  <div id="shopify_quantity" class="quantity">
+                        <input type="button" value="-" class="minus">
+                        <input type="number" step="1" min="1" max="27" name="quantity" value="1" title="Qty" class="input-text qty text" size="4" pattern="[0-9]*" inputmode="numeric">
+                        <input type="button" value="+" class="plus">
+                     </div>
+                </form>
+				<span class="addtocart_button">
+                {% if variant.inventory_management == "shopify" and variant.inventory_policy != "continue" %}
+                {% if variant.available %}<a class="custom_addtocart">Add</a>
+                {%else%}
+                <a class="custom_addtocart cus_disable">Sold Out</a>
+                {%endif%}
+                {%else%}
+                <a class="custom_addtocart cus_disable">Sold Out</a>
+                {%endif%}
+                </span>
+              </div>
+            </td>
+            {% assign variable = variable | plus:1 %}
+            {%endif%} {%endif%}
+            {%- endfor -%}
+          </tr>
+			{% assign variable_ch = variable_ch | plus:1 %}  
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script>
+$(".custom_addtocart").on('click',function() {
+var add = $(this).parents('.addtocart_cus').find('form').serialize();
+$(this).addClass("cust_added").html('added');
+    jQuery.ajax({
+      type: 'POST',
+      url: '/cart/add.js',
+      data: add,
+      dataType: 'json',
+      success: function(cart_data) { 
+        console.log('added');      
+        cartcount();         
+      },
+      error: function(error) {
+        console.log(error);
+      }
+    });
+});
+
+
+function cartcount(){
+    $.getJSON('/cart.js', function(cart) {
+      var TotalCount = cart['item_count'];
+      $('.cartCount').html(TotalCount);
+    }); 
+}
+
+
+function onchange_variant(selectObject){
+    var price,sku,image,id,newdata,qty,i,$mainOwl,imageid,$thumbsOwl,number,datacheckqty;
+    var value = selectObject.value;  
+    newdata=document.getElementById(value);
+    price = newdata.getAttribute('data-price');
+    id = newdata.getAttribute('data-id');
+    sku = newdata.getAttribute('data-sku');
+	qty = newdata.getAttribute('data-qty');
+	datacheckqty = newdata.getAttribute('data-checkqty');
+	imageid = newdata.getAttribute('data-imageid');
+    //console.log(value+'cus-price'+price+'cus-id'+id+'cus-sku'+sku);
+    $("#"+value).parents('tr.variants').find('span#varaint_price').html(price);
+	//newdata.parentNode('tr.variants').closest('span#varaint_sku').innerHTML=price;
+    $("#"+value).parents('tr.variants').find('span#varaint_sku').html(sku);
+    $("#"+value).parents('tr.variants').find('#varaint_id').html(id);
+	$("#"+value).parents('tr.variants').find('#varaint_qty').html(qty);
+	number = $("div#gl_thumbnails").find('[data-image-id="'+imageid+'"]').attr('data-slick-index');
+//	console.log(number+"---imageid---"+imageid);
+  	if(number){	
+	$thumbsOwl = $('.images .thumbnails');
+	$mainOwl = $('.shopify-product-gallery__wrapper');
+	i=number;
+	$thumbsOwl.trigger('to.owl.carousel', i);
+    $mainOwl.trigger('to.owl.carousel', i);
+  	}
+    if(datacheckqty > 0){
+      $("#"+value).parents('tr.variants').find('.addtocart_button a').html('Add').removeClass('cus_disable');
+    }
+    else{
+      $("#"+value).parents('tr.variants').find('.addtocart_button a').html(' Sold Out').addClass('cus_disable');
+    }
+}
+</script>
+
