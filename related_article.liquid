@@ -1,46 +1,41 @@
-<div class="ArticleList ArticleList--withFeatured Grid Grid--m">
-{% assign currentHandle = article.handle %}
+<div class="page-width">
+  <div class="grid">
+    {% assign currentHandle = article.handle %}
     {% assign articlesFound = 0 %}
     {% for article in blogs[blog.handle].articles %}
-      {% unless article.handle == currentHandle %}
-
-
-
-<div class="Grid__Cell 1/2--tablet 1/4--lap-and-up">
-<article class="ArticleItem" style="visibility: inherit; opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0);" >
-  {%- if article.image != blank -%}
-    {%- capture supported_sizes -%}{%- render 'image-size', sizes: '200,400,600,700,800,900,1000,1200', image: article.image -%}{%- endcapture -%}
-    {%- assign image_url = article.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
-
-    <a class="ArticleItem__ImageWrapper AspectRatio AspectRatio--withFallback" style="background: url({{ article.image | img_url: '1x1', format: 'jpg' }}); padding-bottom: 58%; --aspect-ratio: 1.7" href="{{ article.url }}">
-      <img class="ArticleItem__Image Image--lazyLoad Image--fadeIn"
-           data-src="{{ image_url }}"
-           data-widths="[{{ supported_sizes }}]"
-           data-sizes="auto"
-           alt="{{ article.image.alt | escape }}">
-
-      <noscript>
-        <img class="ArticleItem__Image" src="{{ article.image | img_url: '600x' }}" alt="{{ article.image.alt | escape }}">
-      </noscript>
-    </a>
-  {%- endif -%}
-
-  <div class="ArticleItem__Content">
-   
-    <h2 class="ArticleItem__Title Heading u-h2">
-      <a href="{{ article.url }}">{{ article.title }}</a>
-    </h2>
-
-    
-  </div>
-</article>
-
-
-
-
-      </div>
-       {% assign articlesFound = articlesFound |plus: 1 %}
-       {% if articlesFound == 4 %}{% break %}{% endif %}
-      {% endunless %}
+    {% unless article.handle == currentHandle %}
+    <div class="grid__item  medium-up--one-quarter">
+      <article class="ArticleItem" style="visibility: inherit; opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0);" >
+        {%- if article.image != blank -%}
+        {%- assign image_url = article.image | img_url: '' -%}
+	   <a class="ArticleItem__ImageWrapper AspectRatio AspectRatio--withFallback" 
+           href="{{ article.url }}">
+          <img class="ArticleItem__Image"
+               src="{{ image_url }}"
+               alt="{{ article.image.alt | escape }}">
+        </a>
+        {%- endif -%}
+        <div class="card__info">
+          <h3 class="card__name">
+            <a href="{{ article.url }}">{{ article.title }}</a>
+          </h3>
+          <div class="card__excerpt rte">
+            {% if article.excerpt.size > 0 %}
+            {{ article.excerpt }}
+            {% else %}
+            {{ article.content | strip_html | truncatewords: 30 }}
+            {% endif %}
+          </div>
+          <span class="card__read-more">
+            {{ 'blogs.article.read_more' | t }}
+            {% include 'icon-arrow-right' %}
+          </span>
+        </div>
+      </article>
+    </div>
+    {% assign articlesFound = articlesFound |plus: 1 %}
+    {% if articlesFound == 4 %}{% break %}{% endif %}
+    {% endunless %}
     {% endfor %}
+  </div>
 </div>
