@@ -1,0 +1,24 @@
+<!----------fancybox--------->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css"  referrerpolicy="no-referrer" />
+
+<div class="cultiver_hidden product_mobile_device mobile_device">
+  <div class="{% if img_count == 1 %} product-single-image {% else %} product_slider_mobile {% endif %} product_imgaes_mobile">
+  {% for image in product.images %}
+  <div class="mobile_img">
+    <div class="cultiver_image">
+      <img class="img-fluid"
+                                            src="{{ image.src | img_url: '500x' }}"
+                                            data-sizes="auto"
+                                            {{ attribute_prefix }} src="{{ image.src | img_url: '10x' }}"
+                                            {{ attribute_prefix }} data-src="{{ image.src | img_url: '302x' }}"
+                                            {{ attribute_prefix }} class-lazyload="{{image.src}}"
+                                            {{ attribute_prefix }} alt="{{image.src}}" class="blur-up fade-in"
+                                            {{ attribute_prefix }} if="{{image.src}}"
+       />
+      <span data-caption="{{ product.title }}" data-fancybox="gallery" href="{{ image.src | product_img_url: 'original' }}" style="display:none;" class="cultiver_mobile_zoomin">{% render 'icon_mobile_zoomin' %}</span>
+    </div>
+  </div>
+  {% endfor %}
+  </div>
+</div>
