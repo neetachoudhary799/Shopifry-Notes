@@ -1,0 +1,92 @@
+<div class="size_chart__header">
+<div class="size_chart__title">
+<p class="size_header__text">Size guide</p>
+</div>
+<div class="size_chart__description">
+<p class="size_description__text">Bathroom Collection</p>
+<div>measure-trigger-word</div>
+</div>
+</div>
+7.2232%;"&gt;90
+<table width="100%">
+<tbody>
+<tr>
+<td style="width: 36.6606%;"><b>Item</b></td>
+<td style="width: 32.1234%;"><strong>Width</strong></td>
+<td style="width: 27.2232%;"><strong>Length</strong></td>
+</tr>
+<tr>
+<td style="width: 36.6606%;">Bath Towel</td>
+<td style="width: 32.1234%;">
+<div><meta charset="utf-8"></div>
+<span>70</span></td>
+<td style="width: 27.2232%;">140</td>
+</tr>
+<tr>
+<td style="width: 36.6606%;">Bath Sheet</td>
+<td style="width: 32.1234%;">90</td>
+<td style="width: 27.2232%;">175</td>
+</tr>
+<tr>
+<td style="width: 36.6606%;">Hand Towel</td>
+<td style="width: 32.1234%;">
+<div><meta charset="utf-8"></div>
+45</td>
+<td style="width: 27.2232%;">70</td>
+</tr>
+<tr>
+<td style="width: 36.6606%;">Wash Cloth</td>
+<td style="width: 32.1234%;">30</td>
+<td style="width: 27.2232%;">30</td>
+</tr>
+<tr>
+<td style="width: 36.6606%;">Bath Mat</td>
+<td style="width: 32.1234%;">
+<div><meta charset="utf-8"></div>
+<span>60</span></td>
+<td style="width: 27.2232%;">90</td>
+</tr>
+<tr></tr>
+</tbody>
+</table>
+<script>
+$(document).ready(function(){
+$("input#check_cm_in").click(function(){
+      var unit ='';
+      if ($(this).is(':checked')){
+      var unit = 'in';
+      }
+      else{
+      var unit ="cm";
+      }
+  $(".cultiver_customTable table tr td").each(function (){
+    var elem = $(this).find('.cultiver_table_val').text();
+    if($.isNumeric(elem)) {
+        if( unit == 'in'){
+           /*--covert to cm---*/
+            var elemm = $(this).find(".iches").attr('data-attr');
+            if(elemm){
+            var elem= elemm;
+            }
+            var elem=  (elem / 0.39370).toFixed(0);
+            $(this).html('<span class="cultiver_table_val">'+elem+'</span><span> cm</span>');
+        }else{
+          var elem_m=  (elem * 0.39370).toFixed(0); 
+            /*--covert to inches---*/
+            
+          var elemm=  (elem * 0.39370).toFixed(2);
+            $(this).html('<span class="cultiver_table_val iches" data-attr="'+elemm+'" >'+elem_m+'</span><span> in</span>');
+        }
+    }
+  });
+});
+
+$(".cultiver_customTable table tr td").each(function (){
+  var elem = $(this).text();
+  if($.isNumeric(elem)) {
+          $(this).html('<span class="cultiver_table_val">'+elem+'</span><span> cm</span>');
+      }
+});
+  
+});
+</script>
