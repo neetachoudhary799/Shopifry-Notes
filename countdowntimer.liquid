@@ -1,0 +1,276 @@
+{% if section.settings.enable_announcement %}
+    
+    <div class="announcement-bar text-center">
+        <a href="#" id="announcementModal">
+            <div class="container-fluid ">
+                {% for block in section.blocks %}
+                <p class="small-text">{{ block.settings.text }} <span style="me-1">{% if block.settings.plus_icon %}{% if section.settings.title_announcement != blank %}+{% endif %}{% endif %}
+                            {% if block.settings.checkboxset_time != blank %}
+                            <span class="custom_countdowntimer">
+                            <span class="Custom_timerdemo_{{forloop.index}}" 
+                            id="Custom_timerdemo" 
+                            newdate="{{ "today" | date: "%b %d, %Y" }}" 
+                            data-time="{%if block.settings.set_time != blank%}{{block.settings.set_time}}{%else%}{{ "today" | date: "%b %d, %Y" }}{%endif%}{%comment%}{{block.settings.set_time}}{%endcomment%}"></span>
+                            </span>
+                            {% endif %}
+                  </span></p>
+                {% endfor %}
+            </div>
+        </a>
+    </div>
+    
+
+    <!-- Modal -->
+	<div class="modal fade popup-overlay" id="announcementModalBar" tabindex="-1" role="dialog" aria-labelledby="announcementModalBar" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-slideout modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title h1" id="announcementModalLabel">{{ section.settings.title_announcement }}</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> 
+                </div>
+                <img class="img-fluid" src="{{ section.settings.image_announcement |  img_url: 'master'  }}" />
+                <div class="announcement_modal_content">
+                    <p class="large-text subheading">{{ section.settings.subtitle_announcement }}</p>
+                    <p class="standard-text mb-4">{{ section.settings.excerpt_announcement }}</p>
+                    <a 
+                        class="standard-text {{ section.settings.button_class }} {% if section.settings.button_class == 'button-tertiary-with-icon' %}me-2{% endif %}" 
+                        href="{{ section.settings.link_announcement }}">{{ section.settings.button_text }} {% if section.settings.button_class == 'button-tertiary-with-icon' %}{% render 'icon-chevron-right' %}{% endif %}
+                    </a>
+                </div>    
+                
+
+            </div>
+        </div>
+    </div>
+
+	<!-- modal -->
+{% endif %}
+{% style %}
+    .announcement-bar {
+        background: {{ section.settings.announcementbar_background_color }};
+    }
+    .announcement-bar:hover {
+        background: {{ section.settings.announcementbar_hover_color }};
+    }   
+    .announcement-bar p {
+        color: {{ section.settings.announcementbar_text_color }};
+    }
+    /*Required*/
+    @media (max-width: 990px) {
+        .modal-dialog.modal-dialog-slideout {
+            width: 326px;
+        }
+    }
+
+    .modal-dialog-slideout {
+        min-height: 100%;
+        margin: 0 auto 0 0;
+        background: #fff;
+        
+    }
+
+
+    .modal.fade .modal-dialog.modal-dialog-slideout {
+        -webkit-transform: translate(-100%, 0);
+        transform: translate(-100%, 0);
+        
+    }
+    .modal.fade.show .modal-dialog.modal-dialog-slideout {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+        flex-flow: column;
+    }
+
+    .modal-dialog-slideout .modal-content {
+        border: 0;
+    }
+{% endstyle %}
+<script>
+
+</script>
+{% schema %}
+    {
+        "name": "Announcement Bar",
+        "max_blocks": 12,
+        "class": "announcement-bar-section",
+        "enabled_on": {
+            "groups": ["header"]
+        },
+        "settings": [
+            {
+                "type": "image_picker",
+                "id":  "image_announcement",
+                "label": "Select Image"
+            },
+            {
+                "type": "text",
+                "id": "title_announcement",
+                "label": "Title"
+            },
+            {
+                "type": "text",
+                "id": "subtitle_announcement",
+                "label": "Subheading"
+            },
+            {
+                "type": "text",
+                "id": "excerpt_announcement",
+                "label": "Excerpt"
+            },
+            {
+                "type": "url",
+                "id": "link_announcement",
+                "label": "Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "enable_announcement",
+                "label": "Enable announcement bar"
+            },
+            {
+                "type": "text",
+                "id": "button_text",
+                "label": "Button label"
+            },
+            {
+                "type": "select",
+                "id": "button_class",
+                "label": "Button style",
+                "default": "button-primary",
+                "options": [
+                    {
+                        "value": "button-primary",
+                        "label": "Primary"
+                    },
+                    {
+                        "value": "button-secondary",
+                        "label": "Secondary"
+                    },
+                    {
+                        "value": "button-tertiary",
+                        "label": "Tertiary"
+                    },
+                    {
+                        "value": "button-tertiary-with-icon",
+                        "label": "Tertiary with icon"
+                    }
+                ]
+            },
+            {
+                "type": "color",
+                "id": "announcementbar_text_color",
+                "label": "Text Color",
+                "default": "#ffffff"
+            },
+            {
+                "type": "color",
+                "id": "announcementbar_background_color",
+                "label": "Background Color",
+                "default": "#836f57"
+            },
+            {
+                "type": "color",
+                "id": "announcementbar_hover_color",
+                "label": "Hover Background Color",
+                "default": "#979C8F"
+            }
+        ],
+        "blocks": [
+            {
+                "type": "announcement",
+                "name": "Announcement bar",
+                "settings": [
+                    {
+                        "type": "text",
+                        "id": "text",
+                        "default": "Welcome to our store",
+                        "label": "Annoucement label"
+                    },
+                    {
+                        "type": "url",
+                        "id": "link",
+                        "label": "Link label"
+                    },
+                  {
+                      "type": "checkbox",
+                      "id": "plus_icon",
+                      "label": "Enable Plus Icon",
+                    "default":false
+                      },
+                  {
+                      "type": "checkbox",
+                      "id": "checkboxset_time",
+                      "label": "Enable Set Time "
+                      },
+                  {
+                      "type": "text",
+                      "id": "set_time",
+                      "label": "Set Time Oct 25, 2024 ",
+                      "default": "Oct 25, 2024 "
+                      }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "Announcement Bar",
+                "blocks": [
+                    {
+                    "type": "announcement"
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}
+
+<script>
+// Set the date we're counting down to
+
+  var loop='{{section.blocks.size}}';
+console.log(loop);
+// Update the count down every 1 second
+var x = setInterval(function() {
+for (i = 1; i <= loop; i++) {
+var time=$('.Custom_timerdemo_'+i).attr("data-time");
+console.log(time);
+var d = new Date();
+var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+var month = months[d.getMonth()];
+var getDate = d.getDate();
+var getyear = d.getFullYear();
+var totaltime= month+ ' ' + getDate +','+getyear;
+  
+  var countDownDate = new Date(time+' 23:59:59').getTime();
+//var countDownDate = new Date(totaltime+' 18:00:00').getTime();
+  // Get today's date and time
+  var now = new Date().getTime();
+    
+  // Find the distance between now and the count down date
+  var distance = countDownDate - now;
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+console.log(days);
+  if(countDownDate > now){
+var dd="<span class='cultiver_countdowntimer'>" + days + "d : " + hours + "h : "+ minutes + "m : " + seconds + "s </span>";
+    $('.Custom_timerdemo_'+i).html(dd);
+  }
+  else{
+var dd="<span class='cultiver_countdowntimer'>00 d : 00 h : 00 m : 00 s </span>";
+    $('.Custom_timerdemo_'+i).html(dd);
+}
+  // Output the result in an element with id="demo"
+  //document.getElementById("Custom_timerdemo").innerHTML = "<span>" + days + "d : " + hours + "h : "
+ // + minutes + "m : " + seconds + "s </span>";
+    
+  // If the count down is over, write some text 
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("demo").innerHTML = "EXPIRED";
+  }
+}
+}, 1000);
+</script>
