@@ -1,0 +1,16 @@
+ <div class="container-fluid">
+    <div class="recently_box ">
+    <div class="drwawn-box featured-products-slider">
+    <div class="row featured-article-slickslider cutiver_arrow_design_cus">
+    {% for product in article.metafields.custom.blog_page_products.value %}  
+    {%- assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image -%}
+    <div class="col-12 col-lg-4 width-featured paddingdiv  ">
+    {% render 'product-card' , product: product
+    search_show_swatch : true,
+    search_show_price : true %}
+    </div>
+    {%- endfor -%} 
+    </div>
+    </div>
+    </div>
+  </div>
