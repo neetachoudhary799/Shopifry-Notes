@@ -1,0 +1,134 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+<div class="custom_banner hero page-width section-{{ section.id }}-padding">
+  {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'halfimage' -%}
+            <div class="margin-bottom grid grid--2-col grid--2-col-desktop grid--2-col-tablet-down">
+                  <div class="grid__item feature">
+                  <a href=" {% if block.settings.half_width_image_url_1 %}{{ block.settings.half_width_image_url_1 }}{% else %}#{% endif %}" target="_self">
+                      {% if block.settings.half_width_image_1 %}
+                  <img src="{{ block.settings.half_width_image_1 | img_url:'large'}}" class="img-responsive">
+                        {% endif %}
+                  </a>
+                  </div>
+                  <div class="grid__item feature ">
+                  <a href=" {% if block.settings.half_width_image_url_2  %}{{ block.settings.half_width_image_url_2 }}{% else %}#{% endif %}" target="_self">
+                      {% if block.settings.half_width_image_2  %}
+                  <img src="{{ block.settings.half_width_image_2 | img_url:'large'}}" class="img-responsive">
+                    {% endif %}
+                  </a>
+                  </div>
+            </div>
+           {%- when 'fullimage' -%}    
+              <div class="gridd grid--1-col grid--1-col-desktop grid--1-col-tablet-down  ">
+                    <div class="grid__item feature">
+                    <a href="{% if block.settings.full_width_image_url  %}{{ block.settings.full_width_image_url }}{% else %}#{% endif %}" target="_self">
+                      {% if block.settings.full_width_image %}
+                    <img src="{{ block.settings.full_width_image | img_url:'large' }}" class="img-responsive">
+                        {% endif %}
+                    </a>
+                    </div>
+              </div>
+             {%- endcase -%}
+        {%- endfor -%}
+</div>
+
+
+{% schema %}
+  {
+    "name": "Custom Banner",
+      "tag": "section",
+  "class": "section",
+    "settings": [
+      {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    }
+    ],
+     "blocks": [
+    {
+      "type": "fullimage",
+      "name": "Full Image",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "full_width_image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "full_width_image_url",
+          "label": "URL"
+        }
+      ]
+    },
+    {
+      "type": "halfimage",
+      "name": "Half  Image",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "half_width_image_1",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "half_width_image_url_1",
+          "label": "URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "half_width_image_2",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "half_width_image_url_2",
+          "label": "URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Banner",
+      "category": "Banner",
+      "blocks": [
+        {
+          "type": "halfimage"
+        }
+      ]
+    }
+  ]
+  }
+{% endschema %}
