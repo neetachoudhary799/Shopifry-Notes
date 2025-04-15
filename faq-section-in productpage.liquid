@@ -1,0 +1,108 @@
+{%- if section.settings.show_faq_products -%}
+<div class="product_faq_page" style="padding-top:{{ section.settings.padding_top }}px;padding-bottom:{{ section.settings.padding_bottom }}px;">
+  <div class="container-fluid">
+    <div class="faq_headind">
+        {%- if section.settings.faq_title -%}
+        <h2>{{ section.settings.faq_title }}</h2>
+        {%- endif  -%}
+        {%- if section.settings.faq_description -%}
+        <p>{{ section.settings.faq_description }}</p>
+        {%- endif  -%}
+    </div>
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+          {% assign variable = 0 %}
+          {%- for block in section.blocks -%}
+            {% assign variable = variable | plus: 1 %} 
+                <div class="accordion-item">
+                    {%- if block.settings.faq_title_first -%}
+                    <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq_{{ variable }}" aria-expanded="false" aria-controls="flush-collapseOne">
+                       {{ block.settings.faq_title_first }}
+                    </button>
+                    </h2>
+                    {%- endif  -%}
+                    {%- if block.settings.faq_description_first -%}
+                    <div id="faq_{{ variable }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                      <div class="accordion-body bronze-text-accordion">
+                        {{ block.settings.faq_description_first }}
+                      </div> 
+                    </div>
+                    {%- endif  -%}
+                </div>
+          {%- endfor -%}
+    </div>
+  </div>
+</div>
+  {%- endif  -%}
+{% schema %}
+  {
+    "name": "FAQ Page",
+     "settings": [
+           {
+          "type": "checkbox",
+          "id": "show_faq_products",
+          "label": "Show FAQ Secion",
+          "default": true
+          },
+            {
+            "id": "faq_title",
+            "type": "text",
+            "label": "Section title",
+            "default": "Frequently Asked Questions"
+            },
+            {
+            "id": "faq_description",
+            "type": "text",
+            "label": "description",
+            "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            },
+        {
+            "type": "range",
+            "id": "padding_top",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "label": "Padding Top",
+            "default": 20
+        },
+        {
+            "type": "range",
+            "id": "padding_bottom",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "label": "Padding Bottom",
+            "default": 20
+        }
+        
+    ],
+		"blocks": [
+			{
+
+				"name": "FAQ Section",
+				"type": "menu",
+				"settings": [
+                    {
+                      "id": "faq_title_first",
+                      "type": "text",
+                      "label": "Title",
+                      "default": "How long will my return take to process?"
+                    },
+                    {
+                      "id": "faq_description_first",
+                      "type": "text",
+                      "label": "Description",
+                      "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                    }
+				]
+			}
+		],
+    "presets": [
+        {
+            "name": "FAQ"
+        }
+    ]
+  }
+{% endschema %}
